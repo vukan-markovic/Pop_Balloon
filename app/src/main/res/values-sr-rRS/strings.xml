@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Pop Balloon</string>
+    <string name="level_label">Nivo:&#160;</string>
+    <string name="score_label">Rezultat:&#160;</string>
+    <string name="play_game">Počni igru</string>
+    <string name="start_game">Igraj</string>
+    <string name="instructions">Uputstvo</string>
+    <string name="exit">Izađi</string>
+    <string name="finish_level">Završio si nivo&#160;</string>
+    <string name="level_start">Počni nivo</string>
+    <string name="game_instructions">
+        Cilj igrice je puknuti što više balona pre nego što pobegnu.
+        Na početku igrice imate pet života. Nakon svakog nivoa broj balona se povećava kao i brzina kojom se oni pojavljuju.\n
+        \nTestirajte svoje reflekse i vidite koliko ste brzi :)\n
+        \nPop Balloon &#169; 2018\n
+    </string>
+    <string name="high_score_label">Najbolji rezultat:&#160;</string>
+    <string name="game_over">Igra je završena!</string>
+    <string name="new_high_score_title">Novi najbolji rezultat!</string>
+    <string name="new_high_score_message">Tvoj novi najbolji rezultat je:&#160;</string>
+</resources>
