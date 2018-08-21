@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import vukan.com.pop_up_balloon.utils.PixelHelper;
 
 @SuppressLint("AppCompatCustomView")
@@ -22,17 +23,12 @@ public class Balloon extends ImageView implements ValueAnimator.AnimatorUpdateLi
         super(context);
     }
 
-    public Balloon(Context context, int color, int rawHeight) {
-
+    public Balloon(@NonNull Context context, int color, int rawHeight) {
         super(context);
         mListener = (BalloonListener) context;
         this.setImageResource(R.drawable.balloon);
         this.setColorFilter(color);
-        int rawWidth = rawHeight / 2;
-        int dpHeight = PixelHelper.pixelsToDp(rawHeight, context);
-        int dpWidth = PixelHelper.pixelsToDp(rawWidth, context);
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(dpWidth, dpHeight);
-        setLayoutParams(params);
+        setLayoutParams(new ViewGroup.LayoutParams(PixelHelper.pixelsToDp(rawHeight / 2, context), PixelHelper.pixelsToDp(rawHeight, context)));
     }
 
     public void releaseBalloon(int screenHeight, int duration) {
@@ -47,7 +43,7 @@ public class Balloon extends ImageView implements ValueAnimator.AnimatorUpdateLi
     }
 
     @Override
-    public void onAnimationUpdate(ValueAnimator valueAnimator) {
+    public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
         setY((float) valueAnimator.getAnimatedValue());
     }
 
@@ -57,9 +53,7 @@ public class Balloon extends ImageView implements ValueAnimator.AnimatorUpdateLi
 
     @Override
     public void onAnimationEnd(Animator animator) {
-        if (!mPopped) {
-            mListener.popBalloon(this, false);
-        }
+        if (!mPopped) mListener.popBalloon(this, false);
     }
 
     @Override
@@ -72,13 +66,13 @@ public class Balloon extends ImageView implements ValueAnimator.AnimatorUpdateLi
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-
+    public boolean onTouchEvent(@NonNull MotionEvent event) {
         if (!mPopped && event.getAction() == MotionEvent.ACTION_DOWN) {
             mListener.popBalloon(this, true);
             mPopped = true;
             mAnimator.cancel();
         }
+
         return super.onTouchEvent(event);
     }
 

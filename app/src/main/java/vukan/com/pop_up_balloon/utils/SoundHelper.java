@@ -1,12 +1,13 @@
 package vukan.com.pop_up_balloon.utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import vukan.com.pop_up_balloon.R;
 
 public class SoundHelper {
@@ -17,12 +18,10 @@ public class SoundHelper {
     private boolean mLoaded;
     private final float mVolume;
 
-    public SoundHelper(Activity activity) {
+    public SoundHelper(AppCompatActivity activity) {
 
         AudioManager audioManager = (AudioManager) activity.getSystemService(Context.AUDIO_SERVICE);
-        float actVolume = (float) (audioManager != null ? audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) : 0);
-        float maxVolume = (float) (audioManager != null ? audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) : 0);
-        mVolume = actVolume / maxVolume;
+        mVolume = (float) (audioManager != null ? audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) : 0) / (float) (audioManager != null ? audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) : 0);
         activity.setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
@@ -36,13 +35,7 @@ public class SoundHelper {
             mSoundPool = new SoundPool(6, AudioManager.STREAM_MUSIC, 0);
         }
 
-        mSoundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
-            @Override
-            public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
-                mLoaded = true;
-            }
-        });
-
+        mSoundPool.setOnLoadCompleteListener((soundPool, sampleId, status) -> mLoaded = true);
         mSoundID = mSoundPool.load(activity, R.raw.balloon_pop, 1);
     }
 
@@ -50,7 +43,7 @@ public class SoundHelper {
         if (mLoaded) mSoundPool.play(mSoundID, mVolume, mVolume, 1, 0, 1f);
     }
 
-    public void prepareMusicPlayer(Context context) {
+    public void prepareMusicPlayer(@NonNull Context context) {
         mMusicPlayer = MediaPlayer.create(context.getApplicationContext(), R.raw.game_music);
         mMusicPlayer.setVolume(.5f, .5f);
         mMusicPlayer.setLooping(true);

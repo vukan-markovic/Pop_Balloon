@@ -12,16 +12,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-import vukan.com.pop_up_balloon.utils.HighScoreHelper;
-import vukan.com.pop_up_balloon.utils.SimpleAlertDialog;
-import vukan.com.pop_up_balloon.utils.SoundHelper;
-
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import vukan.com.pop_up_balloon.utils.HighScoreHelper;
+import vukan.com.pop_up_balloon.utils.SimpleAlertDialog;
+import vukan.com.pop_up_balloon.utils.SoundHelper;
 
 public class MainActivity extends AppCompatActivity implements Balloon.BalloonListener {
 
@@ -29,24 +31,25 @@ public class MainActivity extends AppCompatActivity implements Balloon.BalloonLi
     private static final int MAX_ANIMATION_DELAY = 1500;
     private static final int MIN_ANIMATION_DURATION = 1000;
     private static final int MAX_ANIMATION_DURATION = 6000;
-    private static final int NUMBER_OF_PINS = 5;
+    private static final int NUMBER_OF_HEARTS = 5;
     private int balloonsPerLevel = 10;
 
     private ViewGroup mContentView;
     private final int[] mBalloonColors = {Color.YELLOW, Color.RED, Color.WHITE, Color.MAGENTA, Color.GREEN, Color.CYAN, Color.BLUE};
     private int mScreenWidth, mScreenHeight;
-    private int mLevel, mScore, mPinsUsed;
+    private int mLevel, mScore, mHeartsUsed;
     private TextView mScoreDisplay;
     private TextView mLevelDisplay;
-    private final List<ImageView> mPinImages = new ArrayList<>();
+    private final List<ImageView> mHeartImages = new ArrayList<>();
     private final List<Balloon> mBalloons = new ArrayList<>();
     private Button mGoButton;
-    private boolean mPlaying;
+    private boolean mPlaying, mSound;
     private boolean mGameStopped = true;
     private int mBalloonsPopped;
     private SoundHelper mSoundHelper;
     private final Random random = new Random();
 
+    @SuppressLint("FindViewByIdCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -68,68 +71,52 @@ public class MainActivity extends AppCompatActivity implements Balloon.BalloonLi
             });
         }
 
-        mContentView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setToFullScreen();
-            }
-        });
-
+        mContentView.setOnClickListener(view -> setToFullScreen());
         mScoreDisplay = findViewById(R.id.score_display);
         mLevelDisplay = findViewById(R.id.level_display);
-        mPinImages.add((ImageView) findViewById(R.id.pushpin1));
-        mPinImages.add((ImageView) findViewById(R.id.pushpin2));
-        mPinImages.add((ImageView) findViewById(R.id.pushpin3));
-        mPinImages.add((ImageView) findViewById(R.id.pushpin4));
-        mPinImages.add((ImageView) findViewById(R.id.pushpin5));
+        mHeartImages.add(findViewById(R.id.heart1));
+        mHeartImages.add(findViewById(R.id.heart2));
+        mHeartImages.add(findViewById(R.id.heart3));
+        mHeartImages.add(findViewById(R.id.heart4));
+        mHeartImages.add(findViewById(R.id.heart5));
         mGoButton = findViewById(R.id.go_button);
         updateDisplay();
         mSoundHelper = new SoundHelper(this);
         mSoundHelper.prepareMusicPlayer(this);
+        mSound = getIntent().getBooleanExtra(StartActivity.SOUND, true);
+        findViewById(R.id.btn_exit).setOnClickListener(view -> finish());
     }
 
     private void setToFullScreen() {
-
-        findViewById(R.id.activity_main).setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
-                | View.SYSTEM_UI_FLAG_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+        findViewById(R.id.activity_main).setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
 
     @Override
     protected void onResume() {
-
         super.onResume();
         setToFullScreen();
     }
 
     private void startGame() {
-
         setToFullScreen();
         mScore = 0;
         mLevel = 0;
-        mPinsUsed = 0;
-        for (ImageView pin: mPinImages) pin.setImageResource(R.drawable.pin);
+        mHeartsUsed = 0;
+        for (ImageView pin : mHeartImages) pin.setImageResource(R.drawable.heart);
         mGameStopped = false;
         startLevel();
-        mSoundHelper.playMusic();
     }
 
     private void startLevel() {
-
         mLevel++;
         updateDisplay();
-        BalloonLauncher launcher = new BalloonLauncher();
-        launcher.execute(mLevel);
+        new BalloonLauncher().execute(mLevel);
         mPlaying = true;
         mBalloonsPopped = 0;
         mGoButton.setVisibility(View.INVISIBLE);
     }
 
     private void finishLevel() {
-
         Toast.makeText(this, getString(R.string.finish_level) + mLevel, Toast.LENGTH_SHORT).show();
         mPlaying = false;
         mGoButton.setText(MessageFormat.format("{0} {1}", getString(R.string.level_start), mLevel + 1));
@@ -137,25 +124,23 @@ public class MainActivity extends AppCompatActivity implements Balloon.BalloonLi
     }
 
     public void goButtonClickHandler(View view) {
-
         if (mGameStopped) startGame();
         else startLevel();
     }
 
     @Override
     public void popBalloon(Balloon balloon, boolean userTouch) {
-
         mBalloonsPopped++;
-        mSoundHelper.playSound();
+        if (mSound) mSoundHelper.playSound();
         mContentView.removeView(balloon);
         mBalloons.remove(balloon);
 
         if (userTouch) mScore++;
         else {
-            mPinsUsed++;
-            if (mPinsUsed <= mPinImages.size())
-                mPinImages.get(mPinsUsed - 1).setImageResource(R.drawable.pin_off);
-            if (mPinsUsed == NUMBER_OF_PINS) {
+            mHeartsUsed++;
+            if (mHeartsUsed <= mHeartImages.size())
+                mHeartImages.get(mHeartsUsed - 1).setImageResource(R.drawable.broken_heart);
+            if (mHeartsUsed == NUMBER_OF_HEARTS) {
                 gameOver();
                 return;
             }
@@ -170,11 +155,10 @@ public class MainActivity extends AppCompatActivity implements Balloon.BalloonLi
     }
 
     private void gameOver() {
-
         Toast.makeText(this, R.string.game_over, Toast.LENGTH_SHORT).show();
         mSoundHelper.pauseMusic();
 
-        for (Balloon balloon: mBalloons) {
+        for (Balloon balloon : mBalloons) {
             mContentView.removeView(balloon);
             balloon.setPopped(true);
         }
@@ -194,37 +178,28 @@ public class MainActivity extends AppCompatActivity implements Balloon.BalloonLi
     }
 
     private void updateDisplay() {
-
         mScoreDisplay.setText(String.valueOf(mScore));
         mLevelDisplay.setText(String.valueOf(mLevel));
     }
 
     @SuppressLint("StaticFieldLeak")
     private class BalloonLauncher extends AsyncTask<Integer, Integer, Void> {
-
+        @Nullable
         @Override
-        protected Void doInBackground(Integer... params) {
-
+        protected Void doInBackground(@NonNull Integer... params) {
             if (params.length != 1) throw new AssertionError("Expected 1 param for current level");
-
-            int level = params[0];
-            int maxDelay = Math.max(MIN_ANIMATION_DELAY,
-                    (MAX_ANIMATION_DELAY - ((level - 1) * 500)));
-            int minDelay = maxDelay / 2;
+            int minDelay = Math.max(MIN_ANIMATION_DELAY, (MAX_ANIMATION_DELAY - ((params[0] - 1) * 500))) / 2;
             int balloonsLaunched = 0;
 
             while (mPlaying && balloonsLaunched < balloonsPerLevel) {
-
                 // Get a random horizontal position for the next balloon
                 Random random = new Random(new Date().getTime());
-                int xPosition = random.nextInt(mScreenWidth - 200);
-                publishProgress(xPosition);
+                publishProgress(random.nextInt(mScreenWidth - 200));
                 balloonsLaunched++;
 
-                // Wait a random number of milliseconds before looping
-                int delay = random.nextInt(minDelay) + minDelay;
                 try {
-                    Thread.sleep(delay);
+                    // Wait a random number of milliseconds before looping
+                    Thread.sleep(random.nextInt(minDelay) + minDelay);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -236,13 +211,11 @@ public class MainActivity extends AppCompatActivity implements Balloon.BalloonLi
         @Override
         protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
-            int xPosition = values[0];
-            launchBalloon(xPosition);
+            launchBalloon(values[0]);
         }
     }
 
     private void launchBalloon(int x) {
-
         Balloon balloon = new Balloon(this, mBalloonColors[random.nextInt(mBalloonColors.length)], 150);
         mBalloons.add(balloon);
 
@@ -251,9 +224,8 @@ public class MainActivity extends AppCompatActivity implements Balloon.BalloonLi
         balloon.setY(mScreenHeight + balloon.getHeight());
         mContentView.addView(balloon);
 
-        // Let 'er fly
-        int duration = Math.max(MIN_ANIMATION_DURATION, MAX_ANIMATION_DURATION - (mLevel * 1000));
-        balloon.releaseBalloon(mScreenHeight, duration);
+        // Let balloons fly
+        balloon.releaseBalloon(mScreenHeight, Math.max(MIN_ANIMATION_DURATION, MAX_ANIMATION_DURATION - (mLevel * 1000)));
     }
 
     @Override

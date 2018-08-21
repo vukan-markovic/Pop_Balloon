@@ -15,6 +15,7 @@ public class SimpleAlertDialog extends DialogFragment {
     public SimpleAlertDialog() {
     }
 
+    @NonNull
     public static SimpleAlertDialog newInstance(String title, String message) {
         Bundle args = new Bundle();
         args.putString(TITLE_KEY, title);
@@ -29,12 +30,10 @@ public class SimpleAlertDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Bundle args = getArguments();
         if (args == null) throw new AssertionError();
-        String title = args.getString(TITLE_KEY);
-        String prompt = args.getString(MESSAGE_KEY);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                .setTitle(title)
-                .setMessage(prompt)
+                .setTitle(args.getString(TITLE_KEY))
+                .setMessage(args.getString(MESSAGE_KEY))
                 .setCancelable(false);
 
         builder.setPositiveButton(android.R.string.ok, null);
