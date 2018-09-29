@@ -8,9 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
 public class SimpleAlertDialog extends DialogFragment {
-
-    private static final String TITLE_KEY = "title_key";
-    private static final String MESSAGE_KEY = "message_key";
+    private static final String TITLE_KEY = "title_key", MESSAGE_KEY = "message_key";
 
     public SimpleAlertDialog() {
     }

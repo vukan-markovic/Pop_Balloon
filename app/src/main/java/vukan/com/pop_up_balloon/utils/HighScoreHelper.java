@@ -6,8 +6,7 @@ import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 
 public class HighScoreHelper {
-    private static final String PREFS_GLOBAL = "prefs_global";
-    private static final String PREF_TOP_SCORE = "pref_top_score";
+    private static final String PREFS_GLOBAL = "prefs_global", PREF_TOP_SCORE = "pref_top_score";
 
     private static SharedPreferences getPreferences(Context context) {
         return context.getSharedPreferences(PREFS_GLOBAL, Context.MODE_PRIVATE);
