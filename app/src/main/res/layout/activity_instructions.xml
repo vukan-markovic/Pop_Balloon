@@ -6,23 +6,36 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btn_back"
+    <ImageButton
+        android:id="@+id/btn_back_instructions"
         android:layout_width="@dimen/heart_size"
         android:layout_height="@dimen/heart_size"
-        android:background="@drawable/ic_arrow_back_black_24dp"
-        android:tint="@android:color/holo_green_light" />
+        android:background="@drawable/arrow_back"
+        android:contentDescription="@string/back_button" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|center_vertical"
-        android:fontFamily="casual"
+        android:fontFamily="@font/original_surfer"
         android:padding="@dimen/instructions_padding"
         android:text="@string/game_instructions"
-        android:textAlignment="center"
-        android:textColor="@color/colorAccent"
-        android:textSize="@dimen/text_size"
+        android:textAlignment="textStart"
+        android:textColor="@color/accent"
+        android:textSize="@dimen/text_size_1"
         android:textStyle="bold"
         tools:context=".InstructionsActivity" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:fontFamily="@font/original_surfer"
+        android:padding="@dimen/instructions_padding"
+        android:text="@string/copyright"
+        android:textAlignment="center"
+        android:textColor="@color/accent"
+        android:textSize="@dimen/text_size_1"
+        android:textStyle="bold"
+        tools:context=".InstructionsActivity" />
+
 </LinearLayout>

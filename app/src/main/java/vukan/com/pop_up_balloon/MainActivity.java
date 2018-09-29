@@ -1,236 +1,192 @@
 package vukan.com.pop_up_balloon;
 
-import android.annotation.SuppressLint;
-import android.graphics.Color;
-import android.os.AsyncTask;
+import android.content.Context;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import com.google.android.gms.appinvite.AppInviteInvitation;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.games.Games;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import java.util.Objects;
+
 import androidx.appcompat.app.AppCompatActivity;
 import vukan.com.pop_up_balloon.utils.HighScoreHelper;
-import vukan.com.pop_up_balloon.utils.SimpleAlertDialog;
 import vukan.com.pop_up_balloon.utils.SoundHelper;
 
-public class MainActivity extends AppCompatActivity implements Balloon.BalloonListener {
-
-    private static final int MIN_ANIMATION_DELAY = 500;
-    private static final int MAX_ANIMATION_DELAY = 1500;
-    private static final int MIN_ANIMATION_DURATION = 1000;
-    private static final int MAX_ANIMATION_DURATION = 6000;
-    private static final int NUMBER_OF_HEARTS = 5;
-    private int balloonsPerLevel = 10;
-
-    private ViewGroup mContentView;
-    private final int[] mBalloonColors = {Color.YELLOW, Color.RED, Color.WHITE, Color.MAGENTA, Color.GREEN, Color.CYAN, Color.BLUE};
-    private int mScreenWidth, mScreenHeight;
-    private int mLevel, mScore, mHeartsUsed;
-    private TextView mScoreDisplay;
-    private TextView mLevelDisplay;
-    private final List<ImageView> mHeartImages = new ArrayList<>();
-    private final List<Balloon> mBalloons = new ArrayList<>();
-    private Button mGoButton;
-    private boolean mPlaying, mSound;
-    private boolean mGameStopped = true;
-    private int mBalloonsPopped;
+public class MainActivity extends AppCompatActivity {
+    public static final String SOUND = "SOUND";
+    private static final int REQUEST_INVITE = 1;
+    private static final int RC_SIGN_IN = 2;
+    private static final int RC_LEADERBOARD_UI = 9004;
+    private static final int RC_ACHIEVEMENT_UI = 9003;
+    private TextView highScore;
     private SoundHelper mSoundHelper;
-    private final Random random = new Random();
+    private boolean mMusic = true, mSound = true;
+    private boolean denied;
+    private Animation animation;
+    private ImageButton btnLeaderboard;
+    private ImageButton btnAchievements;
 
-    @SuppressLint("FindViewByIdCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getWindow().setBackgroundDrawableResource(R.drawable.modern_background);
-        mContentView = findViewById(R.id.activity_main);
+        getWindow().setBackgroundDrawableResource(R.drawable.background);
         setToFullScreen();
-        ViewTreeObserver viewTreeObserver = mContentView.getViewTreeObserver();
-
-        if (viewTreeObserver.isAlive()) {
-            viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-                    mContentView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    mScreenWidth = mContentView.getWidth();
-                    mScreenHeight = mContentView.getHeight();
-                }
-            });
-        }
-
-        mContentView.setOnClickListener(view -> setToFullScreen());
-        mScoreDisplay = findViewById(R.id.score_display);
-        mLevelDisplay = findViewById(R.id.level_display);
-        mHeartImages.add(findViewById(R.id.heart1));
-        mHeartImages.add(findViewById(R.id.heart2));
-        mHeartImages.add(findViewById(R.id.heart3));
-        mHeartImages.add(findViewById(R.id.heart4));
-        mHeartImages.add(findViewById(R.id.heart5));
-        mGoButton = findViewById(R.id.go_button);
-        updateDisplay();
+        Button btnStart = findViewById(R.id.btn_start);
+        Button btnInstructions = findViewById(R.id.btn_instructions);
+        Button btnInviteFriends = findViewById(R.id.btn_invite_friends);
+        ImageButton btnExit = findViewById(R.id.btn_exit);
+        final ImageButton btnMusic = findViewById(R.id.btn_music);
+        final ImageButton btnSound = findViewById(R.id.btn_sound);
+        btnLeaderboard = findViewById(R.id.btn_leaderboard);
+        btnAchievements = findViewById(R.id.btn_achievements);
+        btnLeaderboard.setVisibility(View.GONE);
+        btnAchievements.setVisibility(View.GONE);
         mSoundHelper = new SoundHelper(this);
         mSoundHelper.prepareMusicPlayer(this);
-        mSound = getIntent().getBooleanExtra(StartActivity.SOUND, true);
-        findViewById(R.id.btn_exit).setOnClickListener(view -> finish());
+        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade);
+        animation.setDuration(100);
+        highScore = findViewById(R.id.high_score);
+        highScore.setText(String.valueOf(HighScoreHelper.getTopScore(this)));
+        mSoundHelper.playMusic();
+        btnInstructions.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), InstructionsActivity.class)));
+        findViewById(R.id.activity_start).setOnClickListener(view -> setToFullScreen());
+
+        btnStart.setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(), GameplayActivity.class);
+            intent.putExtra(SOUND, mSound);
+            startActivity(intent);
+        });
+
+        btnExit.setOnClickListener(view -> {
+            view.startAnimation(animation);
+            android.os.Process.killProcess(android.os.Process.myPid());
+            System.exit(0);
+        });
+
+        btnMusic.setOnClickListener(view -> {
+            if (mMusic) {
+                mSoundHelper.pauseMusic();
+                mMusic = false;
+                btnMusic.setBackgroundResource(R.drawable.music_note_off);
+            } else {
+                mSoundHelper.playMusic();
+                mMusic = true;
+                btnMusic.setBackgroundResource(R.drawable.music_note);
+            }
+        });
+
+        btnSound.setOnClickListener(view -> {
+            if (mSound) {
+                mSound = false;
+                btnSound.setBackgroundResource(R.drawable.volume_off);
+            } else {
+                mSound = true;
+                btnSound.setBackgroundResource(R.drawable.volume_up);
+            }
+        });
+
+        btnAchievements.setOnClickListener(view -> {
+            view.startAnimation(animation);
+            if (GoogleSignIn.getLastSignedInAccount(this) != null) {
+                Games.getAchievementsClient(this, Objects.requireNonNull(GoogleSignIn.getLastSignedInAccount(this)))
+                        .getAchievementsIntent()
+                        .addOnSuccessListener(intent1 -> startActivityForResult(intent1, RC_ACHIEVEMENT_UI));
+            }
+        });
+
+        btnLeaderboard.setOnClickListener(view -> {
+            view.startAnimation(animation);
+            if (GoogleSignIn.getLastSignedInAccount(this) != null && isConnected()) {
+                Games.getLeaderboardsClient(this, Objects.requireNonNull(GoogleSignIn.getLastSignedInAccount(this)))
+                        .getLeaderboardIntent(getString(R.string.leaderboard_high_scores))
+                        .addOnSuccessListener(intent -> startActivityForResult(intent, RC_LEADERBOARD_UI));
+            }
+        });
+
+        btnInviteFriends.setOnClickListener(view -> {
+            Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.invite_title))
+                    .setMessage(getString(R.string.invite_message))
+                    .setDeepLink(Uri.parse(getString(R.string.dynamic_link)))
+                    .setCustomImage(Uri.parse(getString(R.string.email_cover)))
+                    .setCallToActionText(getString(R.string.invite_action))
+                    .build();
+            startActivityForResult(intent, REQUEST_INVITE);
+        });
+
+        FirebaseDynamicLinks.getInstance().getDynamicLink(getIntent()).addOnFailureListener(this, e -> Toast.makeText(this, R.string.dynamic_link_fail, Toast.LENGTH_SHORT).show());
     }
 
     private void setToFullScreen() {
-        findViewById(R.id.activity_main).setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+        findViewById(R.id.activity_start).setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         setToFullScreen();
+        highScore.setText(String.valueOf(HighScoreHelper.getTopScore(this)));
+        if (GoogleSignIn.getLastSignedInAccount(this) == null && isConnected() && !denied)
+            signInSilently();
     }
 
-    private void startGame() {
-        setToFullScreen();
-        mScore = 0;
-        mLevel = 0;
-        mHeartsUsed = 0;
-        for (ImageView pin : mHeartImages) pin.setImageResource(R.drawable.heart);
-        mGameStopped = false;
-        startLevel();
+    private void signInSilently() {
+        GoogleSignIn.getClient(this, GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN).silentSignIn().addOnCompleteListener(this, task -> {
+            if (task.isSuccessful()) {
+                Toast.makeText(this, getString(R.string.signed_in), Toast.LENGTH_SHORT).show();
+                btnLeaderboard.setVisibility(View.VISIBLE);
+                btnAchievements.setVisibility(View.VISIBLE);
+                denied = false;
+            } else startSignInIntent();
+        });
     }
 
-    private void startLevel() {
-        mLevel++;
-        updateDisplay();
-        new BalloonLauncher().execute(mLevel);
-        mPlaying = true;
-        mBalloonsPopped = 0;
-        mGoButton.setVisibility(View.INVISIBLE);
-    }
-
-    private void finishLevel() {
-        Toast.makeText(this, getString(R.string.finish_level) + mLevel, Toast.LENGTH_SHORT).show();
-        mPlaying = false;
-        mGoButton.setText(MessageFormat.format("{0} {1}", getString(R.string.level_start), mLevel + 1));
-        mGoButton.setVisibility(View.VISIBLE);
-    }
-
-    public void goButtonClickHandler(View view) {
-        if (mGameStopped) startGame();
-        else startLevel();
+    private void startSignInIntent() {
+        startActivityForResult(GoogleSignIn.getClient(this, GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN).getSignInIntent(), RC_SIGN_IN);
     }
 
     @Override
-    public void popBalloon(Balloon balloon, boolean userTouch) {
-        mBalloonsPopped++;
-        if (mSound) mSoundHelper.playSound();
-        mContentView.removeView(balloon);
-        mBalloons.remove(balloon);
-
-        if (userTouch) mScore++;
-        else {
-            mHeartsUsed++;
-            if (mHeartsUsed <= mHeartImages.size())
-                mHeartImages.get(mHeartsUsed - 1).setImageResource(R.drawable.broken_heart);
-            if (mHeartsUsed == NUMBER_OF_HEARTS) {
-                gameOver();
-                return;
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            if (result.isSuccess()) {
+                Toast.makeText(this, getString(R.string.signed_in), Toast.LENGTH_SHORT).show();
+                btnLeaderboard.setVisibility(View.VISIBLE);
+                btnAchievements.setVisibility(View.VISIBLE);
+                denied = false;
+            } else {
+                denied = true;
+            }
+        } else if (requestCode == REQUEST_INVITE) {
+            if (resultCode == RESULT_OK) {
+                Games.getAchievementsClient(this, Objects.requireNonNull(GoogleSignIn.getLastSignedInAccount(this)))
+                        .unlock(getString(R.string.achievement_invite_friends));
             }
         }
-
-        updateDisplay();
-
-        if (mBalloonsPopped == balloonsPerLevel) {
-            finishLevel();
-            balloonsPerLevel += 10;
-        }
     }
 
-    private void gameOver() {
-        Toast.makeText(this, R.string.game_over, Toast.LENGTH_SHORT).show();
-        mSoundHelper.pauseMusic();
-
-        for (Balloon balloon : mBalloons) {
-            mContentView.removeView(balloon);
-            balloon.setPopped(true);
-        }
-
-        mBalloons.clear();
-        mPlaying = false;
-        mGameStopped = true;
-        mGoButton.setText(R.string.start_game);
-
-        if (HighScoreHelper.isTopScore(this, mScore)) {
-            HighScoreHelper.setTopScore(this, mScore);
-            SimpleAlertDialog dialog = SimpleAlertDialog.newInstance(getString(R.string.new_high_score_title), getString(R.string.new_high_score_message) + mScore);
-            dialog.show(getSupportFragmentManager(), null);
-        }
-
-        mGoButton.setVisibility(View.VISIBLE);
-    }
-
-    private void updateDisplay() {
-        mScoreDisplay.setText(String.valueOf(mScore));
-        mLevelDisplay.setText(String.valueOf(mLevel));
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private class BalloonLauncher extends AsyncTask<Integer, Integer, Void> {
-        @Nullable
-        @Override
-        protected Void doInBackground(@NonNull Integer... params) {
-            if (params.length != 1) throw new AssertionError("Expected 1 param for current level");
-            int minDelay = Math.max(MIN_ANIMATION_DELAY, (MAX_ANIMATION_DELAY - ((params[0] - 1) * 500))) / 2;
-            int balloonsLaunched = 0;
-
-            while (mPlaying && balloonsLaunched < balloonsPerLevel) {
-                // Get a random horizontal position for the next balloon
-                Random random = new Random(new Date().getTime());
-                publishProgress(random.nextInt(mScreenWidth - 200));
-                balloonsLaunched++;
-
-                try {
-                    // Wait a random number of milliseconds before looping
-                    Thread.sleep(random.nextInt(minDelay) + minDelay);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
-            launchBalloon(values[0]);
-        }
-    }
-
-    private void launchBalloon(int x) {
-        Balloon balloon = new Balloon(this, mBalloonColors[random.nextInt(mBalloonColors.length)], 150);
-        mBalloons.add(balloon);
-
-        // Set balloon vertical position and dimensions, add to container
-        balloon.setX(x);
-        balloon.setY(mScreenHeight + balloon.getHeight());
-        mContentView.addView(balloon);
-
-        // Let balloons fly
-        balloon.releaseBalloon(mScreenHeight, Math.max(MIN_ANIMATION_DURATION, MAX_ANIMATION_DURATION - (mLevel * 1000)));
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (mPlaying) gameOver();
+    private boolean isConnected() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = null;
+        if (connectivityManager != null)
+            activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

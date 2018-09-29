@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "744826092635",
+    "firebase_url": "https://pop-balloon-45461343.firebaseio.com",
+    "project_id": "pop-balloon-45461343",
+    "storage_bucket": "pop-balloon-45461343.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:744826092635:android:ab29a83ca0dac1dd",
+        "android_client_info": {
+          "package_name": "vukan.com.pop_up_balloon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "744826092635-kdbgct19305tt2erv5s9lq2c3u8c332n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "vukan.com.pop_up_balloon",
+            "certificate_hash": "99826c9586c2005b98f343b18a6b19cb836bc8f5"
+          }
+        },
+        {
+          "client_id": "744826092635-3bdb3pkbbp3itbilvtgjqu8iogqqrghm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "vukan.com.pop_up_balloon",
+            "certificate_hash": "c60ca97b2f54fba0558ffd59a62fb2e979d7c84c"
+          }
+        },
+        {
+          "client_id": "744826092635-68ofkeegoqq2tqnmv5m9rq9u6j0ntff8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBML130rpe7cEha3aTyor2kMbxr7KQ06DI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "744826092635-68ofkeegoqq2tqnmv5m9rq9u6j0ntff8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

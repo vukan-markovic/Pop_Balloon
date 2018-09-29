@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_id" translatable="false">744826092635</string>
+    <string name="achievement_pop_10_balloons" translatable="false">CgkI2_jg2NYVEAIQAg</string>
+    <string name="achievement_pop_50_balloons" translatable="false">CgkI2_jg2NYVEAIQAw</string>
+    <string name="achievement_pop_500_balloons" translatable="false">CgkI2_jg2NYVEAIQBA</string>
+    <string name="achievement_pop_5000_balloons" translatable="false">CgkI2_jg2NYVEAIQBQ</string>
+    <string name="achievement_reach_level_3" translatable="false">CgkI2_jg2NYVEAIQBg</string>
+    <string name="achievement_reach_level_5" translatable="false">CgkI2_jg2NYVEAIQBw</string>
+    <string name="achievement_reach_level_10" translatable="false">CgkI2_jg2NYVEAIQCA</string>
+    <string name="achievement_invite_friends" translatable="false">CgkI2_jg2NYVEAIQCQ</string>
+    <string name="achievement_reach_level_5_without_losing_life" translatable="false">CgkI2_jg2NYVEAIQCg</string>
+    <string name="achievement_reach_level_3_without_losing_life" translatable="false">CgkI2_jg2NYVEAIQCw</string>
+    <string name="achievement_reach_level_10_without_losing_life" translatable="false">CgkI2_jg2NYVEAIQDA</string>
+    <string name="leaderboard_high_scores" translatable="false">CgkI2_jg2NYVEAIQAQ</string>
+</resources>

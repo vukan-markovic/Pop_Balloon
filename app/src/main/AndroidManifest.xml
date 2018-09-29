@@ -1,25 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="vukan.com.pop_up_balloon">
 
     <application
-
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <meta-data
+            android:name="com.google.android.gms.games.APP_ID"
+            android:value="@string/app_id" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
         <activity
-            android:name=".StartActivity"
+            android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <intent-filter
+                android:autoVerify="true"
+                tools:targetApi="m">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="vukan97.page.link/chat_rooms"
+                    android:scheme="http" />
+                <data
+                    android:host="vukan97.page.link/chat_rooms"
+                    android:scheme="https" />
+
+            </intent-filter>
+
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -27,21 +53,28 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="www.example.com"
-                    android:pathPrefix="/balloon"
+                    android:host="chat_rooms.com"
                     android:scheme="http" />
+                <data
+                    android:host="chat_rooms.com"
+                    android:scheme="https" />
+
             </intent-filter>
+
         </activity>
+
         <activity
             android:name=".InstructionsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:parentActivityName=".StartActivity"
+            android:parentActivityName=".MainActivity"
             android:screenOrientation="landscape" />
+
         <activity
-            android:name=".MainActivity"
+            android:name=".GameplayActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:parentActivityName=".StartActivity"
+            android:parentActivityName=".MainActivity"
             android:screenOrientation="landscape" />
+
     </application>
 
 </manifest>

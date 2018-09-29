@@ -1,18 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Pop Balloon</string>
     <string name="level_label">Level:&#160;</string>
     <string name="score_label">Score:&#160;</string>
-    <string name="level" translatable="false">0</string>
     <string name="play_game">Play game</string>
-    <string name="game_life" translatable="false">Game life</string>
     <string name="start_game">Start game</string>
     <string name="instructions">Instructions</string>
     <string name="finish_level">You finished level&#160;</string>
     <string name="level_start">Start level</string>
-    <string name="game_instructions">The goal of the game is to pop as many balloons as possible before they escape. At the beginning of the game, you have five lives. After each level, the number of balloons increases as well as the speed they appear. So test your reflexes to see how fast you are :)\n\nPop Balloon © 2018</string>
+    <string name="game_instructions">The goal of the game is to pop as many balloons as possible before they escape. At the beginning of the game, you have five lives. After each level, the number of balloons increases as well as the speed they appear. So test your reflexes to see how fast you are :)</string>
+    <string name="copyright" translatable="false">Pop Balloon © 2018</string>
     <string name="high_score" translatable="false">0</string>
     <string name="high_score_label">High score:&#160;</string>
     <string name="game_over">Game over!</string>
     <string name="new_high_score_title">New High Score!</string>
     <string name="new_high_score_message">Your new high score is:&#160;</string>
+    <string name="signed_in">Signed in!</string>
+    <string name="invite_friends">Share</string>
+    <string name="level" translatable="false">0</string>
+    <string name="game_life" translatable="false">Game life</string>
+    <string name="back_button" translatable="false">Back</string>
+    <string name="sound" translatable="false">Sound</string>
+    <string name="music" translatable="false">Music</string>
+    <string name="exit" translatable="false">Exit</string>
+    <string name="leaderboard" translatable="false">Leaderboard</string>
+    <string name="achievements" translatable="false">Achievements</string>
+    <string name="invite_title" translatable="false">Pop Balloon</string>
+    <string name="invite_message" translatable="false">Come and try Pop Balloon Android game!</string>
+    <string name="invite_action" translatable="false">Join me!</string>
+    <string name="dynamic_link_fail" translatable="false">Dynamic link fail!</string>
+    <string name="assertion_message" translatable="false">Expected 1 param for current level</string>
+    <string name="dynamic_link" translatable="false">https://balloon.page.link/pop_up_balloon</string>
+    <string name="email_cover" translatable="false">https://img.grouponcdn.com/deal/7BQdtgZJ6jHiQ5mPPMWH/m2-737x442/v1/c700x420.jpg</string>
 </resources>

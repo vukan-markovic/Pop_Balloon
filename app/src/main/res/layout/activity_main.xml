@@ -1,145 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_main"
+    android:id="@+id/activity_start"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <!-- Container for heart icons, top right -->
-    <Button
+    <ImageButton
         android:id="@+id/btn_exit"
-        android:layout_width="@dimen/button_size_1"
-        android:layout_height="@dimen/button_size_1"
-        android:background="@drawable/ic_arrow_back_black_24dp" />
+        android:layout_width="@dimen/button_size"
+        android:layout_height="@dimen/button_size"
+        android:layout_margin="@dimen/padding"
+        android:background="@drawable/cancel"
+        android:contentDescription="@string/exit" />
+
+    <ImageButton
+        android:id="@+id/btn_leaderboard"
+        android:layout_width="@dimen/button_size"
+        android:layout_height="@dimen/button_size"
+        android:layout_margin="@dimen/padding"
+        android:layout_toStartOf="@id/btn_achievements"
+        android:background="@drawable/games_leaderboards_green"
+        android:contentDescription="@string/leaderboard" />
+
+    <ImageButton
+        android:id="@+id/btn_achievements"
+        android:layout_width="@dimen/button_size"
+        android:layout_height="@dimen/button_size"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="@dimen/padding"
+        android:background="@drawable/games_achievements_green"
+        android:contentDescription="@string/achievements" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="@dimen/margin"
-        android:layout_marginEnd="@dimen/margin"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/heart1"
-            android:layout_width="@dimen/heart_size"
-            android:layout_height="@dimen/heart_size"
-            android:contentDescription="@string/game_life"
-            app:srcCompat="@drawable/heart"
-            tools:ignore="VectorDrawableCompat" />
-
-        <ImageView
-            android:id="@+id/heart2"
-            android:layout_width="@dimen/heart_size"
-            android:layout_height="@dimen/heart_size"
-            android:contentDescription="@string/game_life"
-            app:srcCompat="@drawable/heart"
-            tools:ignore="VectorDrawableCompat" />
-
-        <ImageView
-            android:id="@+id/heart3"
-            android:layout_width="@dimen/heart_size"
-            android:layout_height="@dimen/heart_size"
-            android:contentDescription="@string/game_life"
-            app:srcCompat="@drawable/heart"
-            tools:ignore="VectorDrawableCompat" />
-
-        <ImageView
-            android:id="@+id/heart4"
-            android:layout_width="@dimen/heart_size"
-            android:layout_height="@dimen/heart_size"
-            android:contentDescription="@string/game_life"
-            app:srcCompat="@drawable/heart"
-            tools:ignore="VectorDrawableCompat" />
-
-        <ImageView
-            android:id="@+id/heart5"
-            android:layout_width="@dimen/heart_size"
-            android:layout_height="@dimen/heart_size"
-            android:contentDescription="@string/game_life"
-            app:srcCompat="@drawable/heart"
-            tools:ignore="VectorDrawableCompat" />
-
-    </LinearLayout>
-
-    <!-- Buttons and status displays -->
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@android:color/holo_blue_dark">
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        tools:ignore="RelativeOverlap">
 
         <Button
-            android:id="@+id/go_button"
-            style="?android:borderlessButtonStyle"
-            android:layout_width="wrap_content"
+            android:id="@+id/btn_start"
+            style="@android:style/Widget.Button"
+            android:layout_width="@dimen/width"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:fontFamily="casual"
-            android:onClick="goButtonClickHandler"
+            android:layout_marginTop="@dimen/margin_top"
+            android:layout_marginBottom="@dimen/margin"
+            android:background="@drawable/button_selector"
+            android:fontFamily="@font/original_surfer"
+            android:padding="@dimen/padding"
             android:text="@string/play_game"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/accent"
+            android:textSize="@dimen/text_size"
             android:textStyle="bold" />
 
-        <LinearLayout
+        <Button
+            android:id="@+id/btn_instructions"
+            style="@android:style/Widget.Button"
+            android:layout_width="@dimen/width"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin"
+            android:background="@drawable/button_selector"
+            android:fontFamily="@font/original_surfer"
+            android:padding="@dimen/padding"
+            android:text="@string/instructions"
+            android:textColor="@color/accent"
+            android:textSize="@dimen/text_size"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btn_invite_friends"
+            style="@android:style/Widget.Button"
+            android:layout_width="@dimen/width"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin"
+            android:background="@drawable/button_selector"
+            android:fontFamily="@font/original_surfer"
+            android:padding="@dimen/padding"
+            android:text="@string/invite_friends"
+            android:textColor="@color/accent"
+            android:textSize="@dimen/text_size"
+            android:textStyle="bold" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/high_score_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/original_surfer"
+                android:text="@string/high_score_label"
+                android:textColor="@color/accent"
+                android:textSize="@dimen/text_size"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/high_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/high_score_label"
+                android:fontFamily="@font/original_surfer"
+                android:text="@string/high_score"
+                android:textColor="@color/primary_dark"
+                android:textSize="@dimen/text_size"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/margin_end"
-            android:orientation="horizontal"
-            tools:ignore="RelativeOverlap">
+            android:layout_marginTop="@dimen/margin_top_1"
+            android:layout_marginBottom="@dimen/margin_top_1">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="casual"
-                android:text="@string/level_label"
-                android:textColor="@android:color/holo_orange_dark"
-                android:textSize="@dimen/status_text_size"
-                android:textStyle="bold"
-                tools:ignore="RelativeOverlap" />
-
-            <TextView
-                android:id="@+id/level_display"
-                android:layout_width="@dimen/width_1"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_end_1"
-                android:fontFamily="casual"
-                android:gravity="end"
-                android:text="@string/level"
-                android:textColor="@color/colorAccent"
-                android:textSize="@dimen/status_text_size"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="casual"
-                android:text="@string/score_label"
-                android:textColor="@android:color/holo_orange_dark"
-                android:textSize="@dimen/status_text_size"
-                android:textStyle="bold"
-                tools:ignore="RelativeOverlap" />
-
-            <TextView
-                android:id="@+id/score_display"
-                android:layout_width="@dimen/width_1"
-                android:layout_height="wrap_content"
+            <ImageButton
+                android:id="@+id/btn_music"
+                android:layout_width="@dimen/button_size"
+                android:layout_height="@dimen/button_size"
                 android:layout_marginEnd="@dimen/margin"
-                android:fontFamily="casual"
-                android:gravity="end"
-                android:text="@string/level"
-                android:textColor="@color/colorAccent"
-                android:textSize="@dimen/status_text_size"
-                android:textStyle="bold" />
+                android:background="@drawable/music_note"
+                android:contentDescription="@string/music" />
 
-        </LinearLayout>
+            <ImageButton
+                android:id="@+id/btn_sound"
+                android:layout_width="@dimen/button_size"
+                android:layout_height="@dimen/button_size"
+                android:layout_toEndOf="@id/btn_music"
+                android:background="@drawable/volume_up"
+                android:contentDescription="@string/sound" />
 
-    </RelativeLayout>
+        </RelativeLayout>
+
+    </LinearLayout>
 
 </RelativeLayout>

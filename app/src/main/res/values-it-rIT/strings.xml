@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Pop Balloon</string>
+    <string name="level_label">Livello:&#160;</string>
+    <string name="score_label">Punto:&#160;</string>
+    <string name="finish_level">Hai finito il livello:&#160;</string>
+    <string name="high_score_label">Punteggio alto:&#160;</string>
+    <string name="new_high_score_message">Il tuo nuovo punteggio più alto è:&#160;</string>
+    <string name="play_game">Gioca</string>
+    <string name="start_game">"Inizia il gioco "</string>
+    <string name="instructions">Istruzioni</string>
+    <string name="level_start">Livello di partenza</string>
+    <string name="game_instructions">L\'obiettivo del gioco è far scoppiare più palloncini possibili prima che scappino. All\'inizio del gioco, hai cinque vite. Dopo ogni livello, il numero di palloncini aumenta così come la velocità che appaiono. Quindi prova i tuoi riflessi per vedere quanto sei veloce :)</string>
+    <string name="game_over">Gioco finito!</string>
+    <string name="new_high_score_title">Nuovo record!</string>
+    <string name="invite_friends">Condividere</string>
+    <string name="signed_in">Registrato in!</string>
+</resources>
