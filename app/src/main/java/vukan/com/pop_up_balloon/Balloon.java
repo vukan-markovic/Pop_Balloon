@@ -14,7 +14,6 @@ import vukan.com.pop_up_balloon.utils.PixelHelper;
 
 @SuppressLint("AppCompatCustomView")
 public class Balloon extends ImageView implements ValueAnimator.AnimatorUpdateListener, Animator.AnimatorListener {
-
     private ValueAnimator mAnimator;
     private BalloonListener mListener;
     private boolean mPopped;

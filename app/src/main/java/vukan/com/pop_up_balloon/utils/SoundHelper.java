@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import vukan.com.pop_up_balloon.R;
 
 public class SoundHelper {
-
     private MediaPlayer mMusicPlayer;
     private final SoundPool mSoundPool;
     private final int mSoundID;

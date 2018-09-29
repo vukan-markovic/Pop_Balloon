@@ -8,9 +8,11 @@
     <string name="instructions">Uputstvo</string>
     <string name="finish_level">Završio si nivo&#160;</string>
     <string name="level_start">Počni nivo</string>
-    <string name="game_instructions">Cilj igrice je puknuti što više balona pre nego što pobegnu. Na početku igrice imate pet života. Nakon svakog nivoa broj balona se povećava kao i brzina kojom se oni pojavljuju. Testirajte svoje reflekse i vidite koliko ste brzi :)\n\nPop Balloon &#169; 2018</string>
+    <string name="game_instructions">Cilj igrice je puknuti što više balona pre nego što pobegnu. Na početku igrice imate pet života. Nakon svakog nivoa broj balona se povećava kao i brzina kojom se oni pojavljuju. Testirajte svoje reflekse i vidite koliko ste brzi :)</string>
     <string name="high_score_label">Najbolji rezultat:&#160;</string>
     <string name="game_over">Igra je završena!</string>
     <string name="new_high_score_title">Novi najbolji rezultat!</string>
     <string name="new_high_score_message">Tvoj novi najbolji rezultat je:&#160;</string>
+    <string name="signed_in">Ulogovan!</string>
+    <string name="invite_friends">Podeli</string>
 </resources>

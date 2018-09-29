@@ -1,27 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="margin">6dp</dimen>
+    <dimen name="margin">16dp</dimen>
     <dimen name="margin_top">@dimen/text_size</dimen>
     <dimen name="status_text_size">20sp</dimen>
     <dimen name="heart_size">40dp</dimen>
     <dimen name="button_size">@dimen/heart_size</dimen>
     <dimen name="button_size_1">24dp</dimen>
-    <dimen name="button_size_tablet">@dimen/heart_size_tablet</dimen>
-    <dimen name="heart_size_tablet">80dp</dimen>
-    <dimen name="status_text_size_tablet">40sp</dimen>
     <dimen name="instructions_padding">4dp</dimen>
     <dimen name="text_size">24sp</dimen>
-    <dimen name="instructions_padding_tablet">4dp</dimen>
-    <dimen name="text_size_tablet">48sp</dimen>
+    <dimen name="text_size_1">30sp</dimen>
     <dimen name="margin_end">8dp</dimen>
     <dimen name="margin_end_1">32dp</dimen>
-    <dimen name="back_button">50dp</dimen>
-    <dimen name="text_size_tablet_1">35sp</dimen>
-    <dimen name="tablet">230dp</dimen>
-    <dimen name="width">160dp</dimen>
+    <dimen name="width">180dp</dimen>
     <dimen name="width_1">@dimen/heart_size</dimen>
-    <dimen name="width_tablet">@dimen/heart_size_tablet</dimen>
     <dimen name="margin_top_1">16dp</dimen>
-    <dimen name="margin_tablet">24dp</dimen>
+    <dimen name="padding">6dp</dimen>
 </resources>
