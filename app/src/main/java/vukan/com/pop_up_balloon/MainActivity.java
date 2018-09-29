@@ -26,21 +26,14 @@ import java.util.Objects;
 
 import androidx.appcompat.app.AppCompatActivity;
 import vukan.com.pop_up_balloon.utils.HighScoreHelper;
-import vukan.com.pop_up_balloon.utils.SoundHelper;
 
 public class MainActivity extends AppCompatActivity {
-    public static final String SOUND = "SOUND";
-    private static final int REQUEST_INVITE = 1;
-    private static final int RC_SIGN_IN = 2;
-    private static final int RC_LEADERBOARD_UI = 9004;
-    private static final int RC_ACHIEVEMENT_UI = 9003;
+    public static final String SOUND = "SOUND", MUSIC = "MUSIC";
+    private static final int REQUEST_INVITE = 1, RC_SIGN_IN = 2, RC_LEADERBOARD_UI = 9004, RC_ACHIEVEMENT_UI = 9003;
+    private boolean denied, mMusic = true, mSound = true;
     private TextView highScore;
-    private SoundHelper mSoundHelper;
-    private boolean mMusic = true, mSound = true;
-    private boolean denied;
     private Animation animation;
-    private ImageButton btnLeaderboard;
-    private ImageButton btnAchievements;
+    private ImageButton btnLeaderboard, btnAchievements;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,19 +51,17 @@ public class MainActivity extends AppCompatActivity {
         btnAchievements = findViewById(R.id.btn_achievements);
         btnLeaderboard.setVisibility(View.GONE);
         btnAchievements.setVisibility(View.GONE);
-        mSoundHelper = new SoundHelper(this);
-        mSoundHelper.prepareMusicPlayer(this);
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade);
         animation.setDuration(100);
         highScore = findViewById(R.id.high_score);
         highScore.setText(String.valueOf(HighScoreHelper.getTopScore(this)));
-        mSoundHelper.playMusic();
         btnInstructions.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), InstructionsActivity.class)));
         findViewById(R.id.activity_start).setOnClickListener(view -> setToFullScreen());
 
         btnStart.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(), GameplayActivity.class);
             intent.putExtra(SOUND, mSound);
+            intent.putExtra(MUSIC, mMusic);
             startActivity(intent);
         });
 
@@ -82,11 +73,9 @@ public class MainActivity extends AppCompatActivity {
 
         btnMusic.setOnClickListener(view -> {
             if (mMusic) {
-                mSoundHelper.pauseMusic();
                 mMusic = false;
                 btnMusic.setBackgroundResource(R.drawable.music_note_off);
             } else {
-                mSoundHelper.playMusic();
                 mMusic = true;
                 btnMusic.setBackgroundResource(R.drawable.music_note);
             }
@@ -107,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
             if (GoogleSignIn.getLastSignedInAccount(this) != null) {
                 Games.getAchievementsClient(this, Objects.requireNonNull(GoogleSignIn.getLastSignedInAccount(this)))
                         .getAchievementsIntent()
-                        .addOnSuccessListener(intent1 -> startActivityForResult(intent1, RC_ACHIEVEMENT_UI));
+                        .addOnSuccessListener(intent -> startActivityForResult(intent, RC_ACHIEVEMENT_UI));
             }
         });
 
