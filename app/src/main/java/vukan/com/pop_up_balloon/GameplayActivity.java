@@ -51,7 +51,7 @@ public class GameplayActivity extends AppCompatActivity implements Balloon.Ballo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gameplay);
-        getWindow().setBackgroundDrawableResource(R.drawable.background_2);
+        getWindow().setBackgroundDrawableResource(R.drawable.background);
         mContentView = findViewById(R.id.activity_main);
         setToFullScreen();
         ViewTreeObserver viewTreeObserver = mContentView.getViewTreeObserver();

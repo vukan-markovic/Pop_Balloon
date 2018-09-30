@@ -133,6 +133,10 @@ public class MainActivity extends AppCompatActivity {
         highScore.setText(String.valueOf(HighScoreHelper.getTopScore(this)));
         if (GoogleSignIn.getLastSignedInAccount(this) == null && isConnected() && !denied)
             signInSilently();
+        else if (GoogleSignIn.getLastSignedInAccount(this) != null && isConnected() && btnLeaderboard.getVisibility() == View.GONE && btnAchievements.getVisibility() == View.GONE) {
+            btnLeaderboard.setVisibility(View.VISIBLE);
+            btnAchievements.setVisibility(View.VISIBLE);
+        }
     }
 
     private void signInSilently() {
