@@ -1,2 +1,2 @@
-#-keepattributes Signature
-#-keepattributes *Annotation*
+-keepattributes Signature
+-keepattributes *Annotation*
