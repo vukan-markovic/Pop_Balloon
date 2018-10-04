@@ -2,6 +2,8 @@
 
 **Pop Ballon is simple Android game.**
 
+![App icon](https://lh3.googleusercontent.com/atEA_NNtU6luvIcp-d63dzfDFevzwW1exnvK1yVbtwOBt_Nn7c1rLrdLQQwOpLs-bLgb=s180-rw)
+
 The goal of the game is to pop as many balloons as possible before they escape.
 At the beginning of the game, you have five lives.
 After each level, the number of balloons increases as well as the speed at which they appear.
