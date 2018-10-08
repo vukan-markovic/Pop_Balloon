@@ -12,6 +12,8 @@ After each level, the number of balloons increases as well as the speed at which
 
 [Documentation](https://vukan-markovic.github.io/Pop_Balloon/)
 
+## Screenshots:
+
 ![Google Play Game Sign-in](https://lh3.googleusercontent.com/D3uIdTP8ifhI-QkEAAsEgu0z42Naufg0DaDoXj0iG7OvaZemGNhrDjQu33ZWvIlR7g=w1280-h699-rw)
 
 ![Home screen of the game](https://lh3.googleusercontent.com/Sbo2002tj4cTIPCTpdzm3jfG9Cut5l4Z6LuLqet8TLwf9X7riWwuvjWIO43RX4l5JKs=w1280-h699-rw)
