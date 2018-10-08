@@ -8,7 +8,8 @@ The goal of the game is to pop as many balloons as possible before they escape.
 At the beginning of the game, you have five lives.
 After each level, the number of balloons increases as well as the speed at which they appear.
 
-Amazon Appstore: [Link to the Amazon Appstore](http://a.co/d/cdEIqmh)
+[Link to the Amazon Appstore](http://a.co/d/cdEIqmh)
+[Documentation](https://vukan-markovic.github.io/Pop_Balloon/)
 
 ![Google Play Game Sign-in](https://lh3.googleusercontent.com/D3uIdTP8ifhI-QkEAAsEgu0z42Naufg0DaDoXj0iG7OvaZemGNhrDjQu33ZWvIlR7g=w1280-h699-rw)
 
