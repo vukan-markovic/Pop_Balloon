@@ -10,6 +10,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import vukan.com.pop_up_balloon.R;
 
+/**
+ * <h1>SoundHelper</h1>
+ *
+ * <p><b>SoundHelper</b> class is responsible for reproducing game sound and music.</p>
+ */
 public class SoundHelper {
     private MediaPlayer mMusicPlayer;
     private final SoundPool mSoundPool;
@@ -18,7 +23,6 @@ public class SoundHelper {
     private boolean mLoaded;
 
     public SoundHelper(AppCompatActivity activity) {
-
         AudioManager audioManager = (AudioManager) activity.getSystemService(Context.AUDIO_SERVICE);
         mVolume = (float) (audioManager != null ? audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) : 0) / (float) (audioManager != null ? audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) : 0);
         activity.setVolumeControlStream(AudioManager.STREAM_MUSIC);
@@ -38,20 +42,42 @@ public class SoundHelper {
         mSoundID = mSoundPool.load(activity, R.raw.balloon_pop, 1);
     }
 
+    /**
+     * This method is responsible to play game sound.
+     *
+     * @see SoundPool#play(int, float, float, int, int, float)
+     */
     public void playSound() {
         if (mLoaded) mSoundPool.play(mSoundID, mVolume, mVolume, 1, 0, 1f);
     }
 
+    /**
+     * This method is responsible for preparation of music player which is instance of MediaPlayer class.
+     *
+     * @param context Context of activity which call this method.
+     * @see MediaPlayer
+     */
     public void prepareMusicPlayer(@NonNull Context context) {
         mMusicPlayer = MediaPlayer.create(context.getApplicationContext(), R.raw.game_music);
         mMusicPlayer.setVolume(.5f, .5f);
         mMusicPlayer.setLooping(true);
     }
 
+    /**
+     * This method is responsible for start playing game music.
+     *
+     * @see MediaPlayer#start()
+     */
     public void playMusic() {
         if (mMusicPlayer != null) mMusicPlayer.start();
     }
 
+    /**
+     * This method is responsible for pausing game music.
+     *
+     * @see MediaPlayer#isPlaying()
+     * @see MediaPlayer#pause()
+     */
     public void pauseMusic() {
         if (mMusicPlayer != null && mMusicPlayer.isPlaying()) mMusicPlayer.pause();
     }
