@@ -1,6 +1,8 @@
 package vukan.com.pop_up_balloon;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.games.Games;
 
 import java.text.MessageFormat;
@@ -32,6 +35,11 @@ import vukan.com.pop_up_balloon.utils.HighScoreHelper;
 import vukan.com.pop_up_balloon.utils.SimpleAlertDialog;
 import vukan.com.pop_up_balloon.utils.SoundHelper;
 
+/**
+ * <h1>GamePlayActivity</h1>
+ *
+ * <p><b>GamePlayActivity</b> represent gameplay screen and handle all game logic.</p>
+ */
 public class GameplayActivity extends AppCompatActivity implements Balloon.BalloonListener {
     private static final int MIN_ANIMATION_DELAY = 500, MAX_ANIMATION_DELAY = 1500, MIN_ANIMATION_DURATION = 1000, MAX_ANIMATION_DURATION = 6000, NUMBER_OF_HEARTS = 5;
     private final Random mRandom = new Random();
@@ -46,6 +54,12 @@ public class GameplayActivity extends AppCompatActivity implements Balloon.Ballo
     private final List<Balloon> mBalloons = new ArrayList<>();
     private Animation mAnimation;
 
+    /**
+     * This method is responsible for configurations of gameplay screen.
+     *
+     * @param savedInstanceState Define potentially saved parameters due to configurations changes.
+     * @see android.app.Activity#onCreate(Bundle)
+     */
     @SuppressLint("FindViewByIdCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,12 +96,15 @@ public class GameplayActivity extends AppCompatActivity implements Balloon.Ballo
         updateDisplay();
         mSoundHelper = new SoundHelper(this);
         mSoundHelper.prepareMusicPlayer(this);
-        if (intent.hasExtra(MainActivity.SOUND))
-            mSound = intent.getBooleanExtra(MainActivity.SOUND, true);
-        if (intent.hasExtra(MainActivity.MUSIC))
-            mMusic = intent.getBooleanExtra(MainActivity.MUSIC, true);
         mAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade);
         mAnimation.setDuration(100);
+
+        if (intent.hasExtra(MainActivity.SOUND))
+            mSound = intent.getBooleanExtra(MainActivity.SOUND, true);
+
+        if (intent.hasExtra(MainActivity.MUSIC))
+            mMusic = intent.getBooleanExtra(MainActivity.MUSIC, true);
+
         findViewById(R.id.btn_back_gameplay).setOnClickListener(view -> {
             view.startAnimation(mAnimation);
             gameOver();
@@ -95,16 +112,31 @@ public class GameplayActivity extends AppCompatActivity implements Balloon.Ballo
         });
     }
 
+    /**
+     * This method is responsible to transfer MainActivity into fullscreen mode.
+     */
     private void setToFullScreen() {
         findViewById(R.id.activity_main).setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
 
+    /**
+     * This method is responsible for calling method setToFullScreen().
+     *
+     * @see Activity#onResume()
+     * @see GameplayActivity#setToFullScreen()
+     */
     @Override
     protected void onResume() {
         super.onResume();
         setToFullScreen();
     }
 
+    /**
+     * This method is responsible to continue play music when user back to the game.
+     *
+     * @see Activity#onRestart()
+     * @see SoundHelper#playMusic()
+     */
     @Override
     protected void onRestart() {
         super.onRestart();
@@ -113,6 +145,13 @@ public class GameplayActivity extends AppCompatActivity implements Balloon.Ballo
         }
     }
 
+    /**
+     * This method is responsible to start game and set beginning game parameters.
+     *
+     * @see GameplayActivity#setToFullScreen()
+     * @see SoundHelper#playMusic()
+     * @see GameplayActivity#startLevel()
+     */
     private void startGame() {
         setToFullScreen();
         mScore = 0;
@@ -125,8 +164,16 @@ public class GameplayActivity extends AppCompatActivity implements Balloon.Ballo
         startLevel();
     }
 
+    /**
+     * This method is responsible to start the next level and potentially give user appropriate Google Play Games achievement.
+     *
+     * @see Games#getAchievementsClient(Context, GoogleSignInAccount)
+     * @see GameplayActivity#updateDisplay()
+     * @see BalloonLauncher#execute(Object[])
+     */
     private void startLevel() {
         mLevel++;
+
         if (mLevel == 3) {
             if (GoogleSignIn.getLastSignedInAccount(this) != null) {
                 Games.getAchievementsClient(this, Objects.requireNonNull(GoogleSignIn.getLastSignedInAccount(this)))
@@ -137,6 +184,7 @@ public class GameplayActivity extends AppCompatActivity implements Balloon.Ballo
                 }
             }
         }
+
         if (mLevel == 5) {
             if (GoogleSignIn.getLastSignedInAccount(this) != null) {
                 Games.getAchievementsClient(this, Objects.requireNonNull(GoogleSignIn.getLastSignedInAccount(this)))
@@ -147,6 +195,7 @@ public class GameplayActivity extends AppCompatActivity implements Balloon.Ballo
                 }
             }
         }
+
         if (mLevel == 10) {
             if (GoogleSignIn.getLastSignedInAccount(this) != null) {
                 Games.getAchievementsClient(this, Objects.requireNonNull(GoogleSignIn.getLastSignedInAccount(this)))
@@ -157,6 +206,7 @@ public class GameplayActivity extends AppCompatActivity implements Balloon.Ballo
                 }
             }
         }
+
         updateDisplay();
         new BalloonLauncher().execute(mLevel);
         mPlaying = true;
@@ -164,6 +214,11 @@ public class GameplayActivity extends AppCompatActivity implements Balloon.Ballo
         mGoButton.setVisibility(View.INVISIBLE);
     }
 
+    /**
+     * This method is responsible to finish current level.
+     *
+     * @see Toast#makeText(Context, int, int)
+     */
     private void finishLevel() {
         Toast.makeText(this, getString(R.string.finish_level) + mLevel, Toast.LENGTH_SHORT).show();
         mPlaying = false;
@@ -171,11 +226,26 @@ public class GameplayActivity extends AppCompatActivity implements Balloon.Ballo
         mGoButton.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * This method is called when button start game is clicked and indicate the beginning of the game if game is in the progress,
+     * else it's start new level.
+     *
+     * @param view represent button which user is tapped.
+     * @see GameplayActivity#startGame()
+     * @see GameplayActivity#startLevel()
+     */
     public void goButtonClickHandler(View view) {
         if (mGameStopped) startGame();
         else startLevel();
     }
 
+    /**
+     * This method is called when balloon is popped, either by tapping by user or by going away.
+     *
+     * @param balloon   represent balloon object which is popped.
+     * @param userTouch indicate if user popped balloon or balloon is going away.
+     * @see Games#getAchievementsClient(Context, GoogleSignInAccount)
+     */
     @Override
     public void popBalloon(Balloon balloon, boolean userTouch) {
         mBalloonsPopped++;
@@ -229,6 +299,13 @@ public class GameplayActivity extends AppCompatActivity implements Balloon.Ballo
         }
     }
 
+    /**
+     * This method is called when game is over and showing new high score if it is achieved and send that score to the
+     * Google Play Games leaderboard if user is signed in.
+     *
+     * @see HighScoreHelper
+     * @see SimpleAlertDialog
+     */
     private void gameOver() {
         Toast.makeText(this, R.string.game_over, Toast.LENGTH_SHORT).show();
         if (mMusic) mMusicHelper.pauseMusic();
@@ -249,6 +326,7 @@ public class GameplayActivity extends AppCompatActivity implements Balloon.Ballo
                 Games.getLeaderboardsClient(this, Objects.requireNonNull(GoogleSignIn.getLastSignedInAccount(this)))
                         .submitScore(getString(R.string.leaderboard_high_scores), mScore);
             }
+
             HighScoreHelper.setTopScore(this, mScore);
             SimpleAlertDialog dialog = SimpleAlertDialog.newInstance(getString(R.string.new_high_score_title), getString(R.string.new_high_score_message) + mScore);
             dialog.show(getSupportFragmentManager(), null);
@@ -257,11 +335,21 @@ public class GameplayActivity extends AppCompatActivity implements Balloon.Ballo
         mGoButton.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * This method update score after every popped balloon and level at the beginning of new level.
+     */
     private void updateDisplay() {
         mScoreDisplay.setText(String.valueOf(mScore));
         mLevelDisplay.setText(String.valueOf(mLevel));
     }
 
+    /**
+     * This method add new balloon to the screen.
+     *
+     * @param x represent x axis of the balloon.
+     * @see Balloon
+     * @see ViewGroup#addView(View)
+     */
     private void launchBalloon(int x) {
         Balloon balloon = new Balloon(this, mBalloonColors[mRandom.nextInt(mBalloonColors.length)], 150);
         mBalloons.add(balloon);
@@ -271,6 +359,12 @@ public class GameplayActivity extends AppCompatActivity implements Balloon.Ballo
         balloon.releaseBalloon(mScreenHeight, Math.max(MIN_ANIMATION_DURATION, MAX_ANIMATION_DURATION - (mLevel * 1000)));
     }
 
+    /**
+     * This method is responsible to pause music if user leave game during gameplay.
+     *
+     * @see Activity#onPause()
+     * @see SoundHelper#pauseMusic()
+     */
     @Override
     protected void onPause() {
         super.onPause();
@@ -279,8 +373,24 @@ public class GameplayActivity extends AppCompatActivity implements Balloon.Ballo
         }
     }
 
+    /**
+     * This class is responsible for calculating speed of balloons and x axis position of the balloon
+     *
+     * @see AsyncTask
+     */
     @SuppressLint("StaticFieldLeak")
     private class BalloonLauncher extends AsyncTask<Integer, Integer, Void> {
+
+        /**
+         * This method is executing in background and calculate speed and position of balloons depends on game level.
+         * With increasing level, speed of balloons is increasing too.
+         *
+         * @param params represent current level
+         * @return null
+         * @see AsyncTask#doInBackground(Object[])
+         * @see AsyncTask#publishProgress(Object[])
+         * @see Thread#sleep(long)
+         */
         @Nullable
         @Override
         protected Void doInBackground(@NonNull Integer... params) {
@@ -303,6 +413,13 @@ public class GameplayActivity extends AppCompatActivity implements Balloon.Ballo
             return null;
         }
 
+        /**
+         * This method update UI, calling launchBalloon() method.
+         *
+         * @param values represent calculated x axis of balloon
+         * @see GameplayActivity#launchBalloon(int)
+         * @see AsyncTask#onProgressUpdate(Object[])
+         */
         @Override
         protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
