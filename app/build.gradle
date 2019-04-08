@@ -1,6 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.google.firebase.firebase-perf'
-apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 28
@@ -9,8 +7,8 @@ android {
         applicationId "vukan.com.pop_up_balloon"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 4
-        versionName "2.1"
+        versionCode 5
+        versionName "2.2"
     }
     buildTypes {
         release {
@@ -29,11 +27,8 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.appcompat:appcompat:1.0.0'
     implementation 'com.google.firebase:firebase-core:16.0.3'
-    implementation 'com.google.firebase:firebase-messaging:17.3.2'
-    implementation 'com.google.firebase:firebase-perf:16.1.0'
     implementation 'com.google.firebase:firebase-invites:16.0.3'
     implementation 'com.google.firebase:firebase-dynamic-links:16.1.1'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.5'
     implementation 'com.google.android.gms:play-services-games:15.0.1'
     implementation 'com.google.android.gms:play-services-auth:16.0.0'
 }
