@@ -14,4 +14,4 @@ jobs:
     - uses: actions/checkout@v2
         
     - name: Android Github Action
-      uses: Vukan-Markovic/Github-Android-Action@1.1
+      uses: Vukan-Markovic/Github-Android-Action@1.2
